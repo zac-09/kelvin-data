@@ -2,52 +2,53 @@ import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 
-export const getStaticProps = async () => {
-  const res = await fetch('https://jsonplaceholder.typicode.com/users');
-  const data = await res.json()
+// export const getStaticProps = async () => {
+//   const res = await fetch('https://jsonplaceholder.typicode.com/users');
+//   const data = await res.json()
 
-  console.log(data)
+//   //console.log(data)
 
-  return {
-    props: {
-      users: data
-    }
-  }
-}
-
-
+//   return {
+//     props: {
+//       users: data
+//     }
+//   }
+// }
 
 
 
 
 
 
-export default function Home({users}) {
 
-  // const [users, setUsers] = useState([])
+
+export default function Home() {
+
+  const [userDetails, setUserDetails] = useState([])
   const [phoneNumber, setPhoneNumber] = useState('')
 
-  const apiKey = 'ac4c9b0e-ecbc-43c3-a785-a6480df2092f';
+  
+
+  const onPhonenumberChange = (e) => {
+    let phoneNo = (e.target.value)
+    setPhoneNumber(phoneNo.toString())
+    
+  }
 
   const getData = async () => {
-    const res = await fetch('https://jsonplaceholder.typicode.com/users');
+
+   const res = await fetch('/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({phoneNumber}),
+    })
+
+    // const res = await fetch('/api/users');
     const data = await res.json()
-  
-    console.log(data)
-    // let phoneNo = phoneNumber
-    //   let response = await axios.get(`https://api.kelvindata.com/rest/v1/search-v2?phone=${phoneNo}&apiKey=${apiKey}`, {
-
-    //   })
-
-    //   if(response){
-    //     setDetails(response.data)
-    //   }
-    //   else{
-        
-    //   }
-
-    //   console.log(response.data)
-
+ 
+    setUserDetails(data)
   }
 
   return (
@@ -67,7 +68,7 @@ export default function Home({users}) {
         <div className="col col-11 mx-auto">
           <div className="row bg-white rounded shadow-sm p-2 add-todo-wrapper align-items-center justify-content-center">
             <div className="col">
-              <input className="form-control form-control-lg border-0  bg-transparent rounded" type="text"  placeholder="Enter phone number .."  />
+              <input className="form-control form-control-lg border-0  bg-transparent rounded" type="text" value={phoneNumber} onChange={onPhonenumberChange}  placeholder="Enter phone number .."  />
             </div>
 
             <div className="col-auto px-0 mx-0 mr-2">
@@ -109,7 +110,7 @@ export default function Home({users}) {
   <th style={{width: '200px'}}>Email(s)</th>
   <th>Phone No.</th>
 </tr>
-{users.length > 0? users.map(detail => (
+{userDetails?.map(detail => (
               
               <tbody>
                
@@ -117,12 +118,12 @@ export default function Home({users}) {
                   <td>{detail.name.first}</td>
                   <td>{detail.name.last}</td>
                   <td>{detail.gender}</td>
-                  <td>{detail.email}</td>
-                  <td>{detail.phone}</td>
+                  <td>{detail.emailAddresses}</td>
+                  <td>{detail.phoneAccounts}</td>
                 </tr>
 
               </tbody>
-              )): <h1>Sorry, no records were found for that number</h1>}
+              ))}
 
 </table>
 
