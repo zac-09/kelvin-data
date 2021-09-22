@@ -47,8 +47,8 @@ export default function Home() {
 
     // const res = await fetch('/api/users');
     const data = await res.json()
- 
-    setUserDetails(data)
+    
+    setUserDetails(data.data)
   }
 
   return (
@@ -118,8 +118,8 @@ export default function Home() {
                   <td>{detail.name.first}</td>
                   <td>{detail.name.last}</td>
                   <td>{detail.gender}</td>
-                  <td>{detail.emailAddresses}</td>
-                  <td>{detail.phoneAccounts}</td>
+                  <td>{detail.emailAddresses.map(el=><span>{el}</span>)}</td>
+                  <td>{detail.phoneAccounts.map(el=><span>{el.uri}</span>)}</td>
                 </tr>
 
               </tbody>
